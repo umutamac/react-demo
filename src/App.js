@@ -5,7 +5,7 @@ import randomatic from 'randomatic';
 
 function App() {
   const [items, setItems] = useState([]);
-  const [newItem, setNewItem] = useState("");
+  // const [newItem, setNewItem] = useState("");
   const [tab, setTab] = useState("all")
   const [color, setColor] = useState("black"); // black | red | blue
 
