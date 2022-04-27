@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import './App.css';
-import List from './components/List.js';
+import { List, Settings } from './components';
 import randomatic from 'randomatic';
 
 function App() {
-  const [items, setItems] = useState([]);
-  // const [newItem, setNewItem] = useState("");
-  const [tab, setTab] = useState("all")
+  const [tab, setTab] = useState("all");
   const [color, setColor] = useState("black"); // black | red | blue
+  const [items, setItems] = useState([]);
 
   // let activeTab = "all"; // all | undone | done | settings
   /* 
@@ -19,50 +18,36 @@ function App() {
   */
 
   function changeTab(target) {
-    console.log(`change tab to: ${target}`)
+    console.log(`change tab to: ${target}`);
     setTab(target);
-    //activeTab = target;
-  }
-
-  function colorHandler(e) {
-    setColor(e.target.value);
   }
 
   function addToDo() {
     let newText = document.getElementById("newToDo").value
     if (!newText) return;
     const newToDo = { text: newText, done: false, id: randomatic('A0!', 8) };
+    console.log("newToDo");
     console.log(newToDo);
 
     setItems([...items, newToDo]);
 
     // reset text area
     document.getElementById("newToDo").value = "";
-    // setNewItem("");
-    console.log("items:")
-    console.log(items)
+
+    console.log("items:");
+    console.log(items);
   }
 
-  // function addToDo() {
-  //   if (newItem === "") return;
-  //   const newToDo = { text: newItem, done: false, id: randomatic('A0!', 8) };
+  function clearAllItems() {
+    setItems([])
+  }
 
-  //   console.log(newToDo);
-  //   items.push(newToDo);
-  //   //setItems(items);
-    
-  //   // reset text area
-  //   document.getElementById("newToDo").value = "";
-  //   setNewItem("");
-  // }
-
- 
-
-  // const toggleItem = (id) => {
-  //   let targetItem = items.find(item => id === item.id);
-  //   targetItem.done = targetItem.done === false ? true : false
-
-  // }
+  const toggleItem = (newItem) => {
+    let copy = [...items];
+    let index = copy.findIndex((item) => newItem.id === item.id)
+    copy[index] = newItem;
+    setItems(copy);
+  }
 
   function filteredItems() {
     switch (tab) {
@@ -100,27 +85,22 @@ function App() {
         <button onClick={addToDo}>Add</button>
       </div>
 
-      <div>
-        <button onClick={() => changeTab("all")}>All</button>
-        <button onClick={() => changeTab("undone")}>Undone</button>
-        <button onClick={() => changeTab("done")}>Done</button>
-        <button onClick={() => changeTab("settings")}>Settings</button>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "10px 10px", margin: "100px auto" }}>
+        <div onClick={() => changeTab("all")} className="buttonDiv" style={{ backgroundColor: tab === "all" ? "gray" : "white" }}>All</div>
+        <div onClick={() => changeTab("undone")} className="buttonDiv" style={{ backgroundColor: tab === "undone" ? "gray" : "white" }}>Undone</div>
+        <div onClick={() => changeTab("done")} className="buttonDiv" style={{ backgroundColor: tab === "done" ? "gray" : "white" }}>Done</div>
+        <div onClick={() => changeTab("settings")} className="buttonDiv" style={{ backgroundColor: tab === "settings" ? "gray" : "white" }}>Settings</div>
       </div>
 
       <div style={{ display: "flex", alignItems: "center", justifyContent: "center", margin: "100px auto" }}>
         {
-          tab === "settings" ?
-            <div>
-              <label htmlFor="color" style={{ marginRight: "10px" }}>Choose color:</label>
-              <select name="color" id="color" onChange={colorHandler}>
-                <option value="black">Black</option>
-                <option value="red">Red</option>
-                <option value="blue">Blue</option>
-              </select>
-            </div>
-            : <List items={filteredItems(items)} color={color} />
+          tab === "settings"
+            ? <Settings handler={setColor} />
+            : <List items={filteredItems(items)} color={color} toggle={toggleItem} />
         }
       </div>
+
+      <button onClick={clearAllItems}>Clear To Dos</button>
     </div>
   );
 }

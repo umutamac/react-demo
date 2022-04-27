@@ -1,9 +1,21 @@
 // import logo from './logo.svg';
 // import './List.css';
 
-function List({ items, color }) {
+function List({ items, color, toggle }) {
     console.log("List")
     //console.log(items)
+
+    function toggleHandler(index) {
+        console.log(index)
+
+        let toggledItem = {
+            text: items[index].text,
+            id: items[index].id,
+            done: !items[index].done
+        }
+        toggle(toggledItem);
+    }
+
     return (
         <div>
             {
@@ -11,8 +23,10 @@ function List({ items, color }) {
                     ? <span><i>Nothing here...</i></span>
                     : items.map((item, i) =>
                         <div key={i} style={{ display: "flex", alignItems: "center", color: color }}>
-                            <input type="checkbox" checked={item.done || undefined} style={{ marginRight: "10px" }} />
-                            <span>{item.text}</span>
+                            {/* <input type="checkbox" checked={item.done || undefined} /> */}
+                            <div onClick={() => toggleHandler(i)} style={{ cursor: "pointer" }}>{item.done ? <span>&#9745;</span> : <span>&#9744;</span>}</div>
+
+                            <span style={{ marginLeft: "10px" }} >{item.text}</span>
                         </div>
                     )
             }
