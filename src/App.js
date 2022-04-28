@@ -67,23 +67,16 @@ function App() {
       <header>
         <h1>My ToDo App</h1>
       </header>
-      <div>
-        {/* <div>text - id - done? (length: {items.length})</div> */}
+      {/* <div>
+        <div>text - id - done? (length: {items.length})</div> 
         {
-          /*
           // render all items for debugging
           items.map((item, i) =>
             <div key={item.id}>{item.text} - {item.id} - {item.done.toString()}</div>
           )
-          */
         }
-      </div>
-
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "10px 10px", margin: "100px auto" }}>
-        <label htmlFor="newToDo">New To Do Item:</label>
-        <textarea id="newToDo" name="newToDo" placeholder="Type..."></textarea>
-        <button onClick={addToDo}>Add</button>
-      </div>
+      </div> 
+      */}
 
       <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "10px 10px", margin: "100px auto" }}>
         <div onClick={() => changeTab("all")} className="buttonDiv" style={{ backgroundColor: tab === "all" ? "gray" : "white" }}>All</div>
@@ -99,8 +92,20 @@ function App() {
             : <List items={filteredItems(items)} color={color} toggle={toggleItem} />
         }
       </div>
+      
+      {
+        tab === "all" ?
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "10px 10px", margin: "100px auto" }}>
+            <label htmlFor="newToDo">New To Do Item:</label>
+            <textarea id="newToDo" name="newToDo" placeholder="Type..."></textarea>
+            <button onClick={addToDo}>Add</button>
+          </div>
+          : <div></div>
+      }
+      {
+        tab === "all" && <button onClick={clearAllItems}>Clear All To Dos</button>
+      }
 
-      <button onClick={clearAllItems}>Clear To Dos</button>
     </div>
   );
 }
